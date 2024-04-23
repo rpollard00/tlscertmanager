@@ -1,3 +1,5 @@
+using Adapter.Api.Controllers;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 public class AdapterApi
 {
     private WebApplicationBuilder _builder;
@@ -8,9 +10,16 @@ public class AdapterApi
 
         options.Invoke(_builder.Services);
 
-        _builder.Services.AddControllers();
+        System.Console.WriteLine("Constructor invoked");
         _builder.Services.AddEndpointsApiExplorer();
+        _builder.Services.AddControllers();
         _builder.Services.AddSwaggerGen();
+
+        // Necessary when called from a different assembly
+        var assembly = typeof(HelloWorldController).Assembly;
+
+        _builder.Services.AddControllers()
+                .PartManager.ApplicationParts.Add(new AssemblyPart(assembly));
     }
 
     public Task RunAsync()
@@ -19,16 +28,20 @@ public class AdapterApi
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
         var app = _builder.Build();
+        // Output registered controllers and routes
+        System.Console.WriteLine("Run async executing");
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
+            app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Hello"));
         }
+        // app.UseHttpsRedirection();
 
-        app.UseHttpsRedirection();
 
+        // app.UseAuthorization();
         app.MapControllers();
         return app.RunAsync();
     }
