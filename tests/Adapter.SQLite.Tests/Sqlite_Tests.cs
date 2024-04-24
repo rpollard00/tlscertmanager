@@ -1,9 +1,6 @@
-using Adapter.Api.SQLite;
 using Core.Models;
-using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.Sqlite;
 using Adapter.Api.SQLite.DataAccess;
+
 namespace Adapter.Api.SQLite.Tests;
 
 public class DriveDbTests
@@ -15,24 +12,14 @@ public class DriveDbTests
 
     public DriveDbTests()
     {
-
-        var connection = new SqliteConnection(_connectionString);
-        connection.Open();
-
-        var options = new DbContextOptionsBuilder<CertDbContext>().UseSqlite(connection).Options;
-
-        using (var context = new CertDbContext(_connectionString))
-        {
-            context.Database.EnsureCreated();
-        }
         _dbContext = new CertDbContext(_connectionString);
+        _dbContext.EnsureDatabaseCreated();
 
     }
     // Using tests to drive db before I've created any frontend or API endpoints
     [Fact]
     public void CreateCertInSqliteDbTest()
     {
-
         Certificate cert = new()
         {
             SubjectName = "load.test.com",
@@ -223,97 +210,4 @@ public class DriveDbTests
         Assert.Contains("otherdomain4.test.local", allSanNames);
 
     }
-    // public class Certificate
-    // {
-    //     public long Id { get; set; }
-    //     public string? SubjectName { get; set; }
-    //
-    //     public long IssueDate { get; set; }
-    //     public long ExpirationDate { get; set; }
-    //
-    //     public CryptoAlgorithm CryptoAlgorithm { get; set; } = new(); // FK
-    //     public Issuer Issuer { get; set; } = new(); // FK
-    //
-    //     public List<SubjectAlternateName>? SubjectAlternateNames { get; set; } = new(); // Many-to-many FK
-    //     public List<SystemNode>? SystemNode { get; set; } = new(); // Many-to-many FK
-    //
-    //     public bool isExpiring(int threshold)
-    //     {
-    //         return DateTimeOffset.FromUnixTimeMilliseconds(ExpirationDate) <= DateTime.UtcNow.AddDays(threshold);
-    //     }
-    // }
-    // [Fact]
-    // public void GreetingShouldReturnGoodMorningMessage()
-    // {
-    //     // Arrange
-    //     DisplayMessages messages = new DisplayMessages();
-    //     string expected = "Go to bed Car";
-    //
-    //     // Act
-    //     string actual = messages.Greeting("Car", 2);
-    //
-    //     Assert.Equal(expected, actual);
-    // }
-    //
-    // [Fact]
-    // public void LigmaShouldReturnLigmaBallsMessage()
-    // {
-    //     //Given
-    //     DisplayMessages messages = new DisplayMessages();
-    //     string expected = "Ligma Balls Michael";
-    //
-    //     //When
-    //     string actual = messages.Ligma("Michael");
-    //
-    //     //Then
-    //     Assert.Equal(expected, actual);
-    // }
-    //
-    // [Theory]
-    // [InlineData("Tim", 0, "Go to bed Tim")]
-    // [InlineData("Tim", 1, "Go to bed Tim")]
-    // [InlineData("Tim", 2, "Go to bed Tim")]
-    // [InlineData("Tim", 3, "Go to bed Tim")]
-    // [InlineData("Tim", 4, "Go to bed Tim")]
-    // [InlineData("Tim", 5, "Good morning Tim")]
-    // [InlineData("Tim", 6, "Good morning Tim")]
-    // [InlineData("Tim", 7, "Good morning Tim")]
-    // [InlineData("Tim", 8, "Good morning Tim")]
-    // [InlineData("Tim", 9, "Good morning Tim")]
-    // [InlineData("Tim", 10, "Good morning Tim")]
-    // [InlineData("Tim", 11, "Good morning Tim")]
-    // [InlineData("Tim", 12, "Good afternoon Tim")]
-    // [InlineData("Tim", 13, "Good afternoon Tim")]
-    // [InlineData("Tim", 14, "Good afternoon Tim")]
-    // [InlineData("Tim", 15, "Good afternoon Tim")]
-    // [InlineData("Tim", 16, "Good afternoon Tim")]
-    // [InlineData("Tim", 17, "Good afternoon Tim")]
-    // [InlineData("Larry", 18, "Good evening Larry")]
-    // [InlineData("Larry", 19, "Good evening Larry")]
-    // [InlineData("Larry", 20, "Good evening Larry")]
-    // [InlineData("Larry", 21, "Good evening Larry")]
-    // [InlineData("Larry", 22, "Good evening Larry")]
-    // [InlineData("Larry", 23, "Good evening Larry")]
-    // public void GreetingShouldReturnExpectedValue(string firstName, int hourOfTheDay, string expected)
-    // {
-    //     DisplayMessages messages = new DisplayMessages();
-    //
-    //     string actual = messages.Greeting(firstName, hourOfTheDay);
-    //
-    //     Assert.Equal(expected, actual);
-    // }
-
-    // [Fact]
-    // public void LigmaShouldReturnLigmaBallsWithAnotherNameMessage()
-    // {
-    //     //Given
-    //     DisplayMessages messages = new DisplayMessages();
-    //     string expected = "Ligma Balls Tevin";
-    //
-    //     //When
-    //     string actual = messages.Ligma("Tevin");
-    //
-    //     //Then
-    //     Assert.Equal(expected, actual);
-    // }
 }
