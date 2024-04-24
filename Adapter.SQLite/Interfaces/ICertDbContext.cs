@@ -10,4 +10,5 @@ public interface ICertDbContext
     public DbSet<SystemNode> SystemNodes { get; set; }
 
     int SaveChanges();
+    void EnsureDatabaseCreated();
 }

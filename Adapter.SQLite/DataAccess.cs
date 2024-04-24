@@ -48,4 +48,8 @@ public class CertDbContext : DbContext, ICertDbContext
         optionsBuilder.LogTo(Console.WriteLine);
     }
 
+    public void EnsureDatabaseCreated()
+    {
+        Database.EnsureCreated();
+    }
 }
