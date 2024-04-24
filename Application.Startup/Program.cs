@@ -4,7 +4,4 @@
     // work to be done
 });
 
-
-
-System.Console.WriteLine("HELLO???");
 await api.RunAsync();
