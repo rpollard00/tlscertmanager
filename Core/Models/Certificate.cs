@@ -10,7 +10,9 @@ public class Certificate
     public long IssueDate { get; set; }
     public long ExpirationDate { get; set; }
 
+    public long? CryptoAlgorithmId { get; set; }
     public CryptoAlgorithm CryptoAlgorithm { get; set; } = new(); // FK
+    public long? IssuerId { get; set; }
     public Issuer Issuer { get; set; } = new(); // FK
 
     public List<SubjectAlternateName>? SubjectAlternateNames { get; set; } = new(); // Many-to-many FK
@@ -20,5 +22,6 @@ public class Certificate
     {
         return DateTimeOffset.FromUnixTimeMilliseconds(ExpirationDate) <= DateTime.UtcNow.AddDays(threshold);
     }
+
 }
 
