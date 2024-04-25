@@ -1,5 +1,3 @@
-using Adapter.Api.SQLite.DataAccess;
-using Core;
 using Core.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -54,7 +52,13 @@ public class CertificateDataAdapterRetrieve : ICertificateRetriever
 
     public List<Certificate> GetAllCertificates()
     {
-        throw new NotImplementedException();
+        var certs = _dbContext.Certificates.Include(c => c.CryptoAlgorithm)
+            .Include(c => c.SubjectAlternateNames)
+            .Include(c => c.SystemNode)
+            .Include(c => c.Issuer)
+            .ToList();
+
+        return certs;
     }
 
     public Certificate? GetCertificateById(long id)
@@ -65,6 +69,7 @@ public class CertificateDataAdapterRetrieve : ICertificateRetriever
                                   .Include(c => c.SystemNode)
                                   .Include(c => c.Issuer)
                                   .FirstOrDefault();
+
 
         return cert;
 
@@ -87,5 +92,13 @@ public class CertificateDataAdapterRemove : ICertificateRemover
     }
     public void RemoveCertificate(long id)
     {
+    }
+}
+
+public class CertificateDataAdapterUpdate : ICertificateUpdater
+{
+    public void UpdateCertificate(Certificate certificate)
+    {
+        throw new NotImplementedException();
     }
 }

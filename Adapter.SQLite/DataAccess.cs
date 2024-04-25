@@ -20,6 +20,7 @@ public class CertDbContext : DbContext, ICertDbContext
     {
 
     }
+
     public CertDbContext(string ConnectionString)
     {
         _connectionString = ConnectionString;
@@ -35,15 +36,19 @@ public class CertDbContext : DbContext, ICertDbContext
             {
                 optionsBuilder.UseSqlite(_connectionString);
             }
-        }
-        else
-        {
-            base.OnConfiguring(optionsBuilder);
+            else
+            {
 
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
-            var config = builder.Build();
+                base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.UseSqlite(config.GetSection("ConnectionStrings")["Default"]);
+                var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+                var config = builder.Build();
+
+                var connectionStr = config.GetSection("ConnectionStrings")["Default"];
+                optionsBuilder.UseSqlite(connectionStr);
+                System.Console.WriteLine($"THE CONNECTION STRING: {connectionStr}");
+                System.Console.WriteLine("THE DB CONTEXT IS WORKING.....");
+            }
         }
         optionsBuilder.LogTo(Console.WriteLine);
     }
