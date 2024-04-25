@@ -16,17 +16,17 @@ public static class CertificateDtoMapper
             IssueDate = cert.IssueDate,
             ExpirationDate = cert.ExpirationDate,
 
-            Issuer = cert.Issuer.ToString() ?? "",
-            CryptoAlgorithm = cert.CryptoAlgorithm.ToString() ?? "",
+            Issuer = cert.Issuer.Name ?? "",
+            CryptoAlgorithm = cert.CryptoAlgorithm.Name ?? "",
 
             SubjectAlternateNames = cert.SubjectAlternateNames
                                     != null ? cert.SubjectAlternateNames
-                                    .Select(s => s.ToString() ?? "")
+                                    .Select(s => s.Name ?? "")
                                     .ToList() : null,
 
             SystemNode = cert.SystemNode
                          != null ? cert.SystemNode
-                         .Select(s => s.ToString() ?? "")
+                         .Select(s => s.Name ?? "")
                          .ToList() : null,
 
             // TODO: Not hardcode the threshold
