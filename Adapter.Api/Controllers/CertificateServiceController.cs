@@ -18,10 +18,6 @@ public class CertificateServiceController : ControllerBase
     {
         var result = _certSvc.GetCertificates();
 
-        System.Console.WriteLine($"Result Length {result.Count()}");
-        result.ForEach(r => System.Console.WriteLine($"Result {r.SubjectName}"));
-
-
         return Ok(result);
 
     }
