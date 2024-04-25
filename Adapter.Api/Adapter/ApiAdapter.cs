@@ -1,4 +1,6 @@
 using Core.Models;
+using Core.Dtos;
+using Core.Mapper;
 
 namespace Adapter.Api.Adapter;
 
@@ -22,9 +24,33 @@ public class ApiAdapter : ICertificateService
         _certificateUpdater = certificateUpdater;
     }
 
-    public Certificate CreateCertificate(Certificate cert) => _certificateCreator.CreateCertificate(cert);
+    public CertificateDto CreateCertificate(CertificateDto cert)
+    {
+        // _certificateCreator.CreateCertificate(cert);
+        throw new NotImplementedException("Todo Create Certificate Adapter");
+    }
 
-    public Certificate? GetCertificateById(long id) => _certificateRetriever.GetCertificateById(id);
+    public CertificateDto? GetCertificateById(long id)
+    {
 
-    public List<Certificate> GetCertificates() => _certificateRetriever.GetAllCertificates();
+        throw new NotImplementedException("Todo GetCertificate By Id");
+        // return CertificateDtoMapper.CertificateToDto();
+    }
+
+    public List<CertificateDto>? GetCertificates()
+    {
+        var result = _certificateRetriever.GetAllCertificates();
+
+        if (result.Count == 0)
+        {
+            return null;
+        }
+
+        List<CertificateDto> output = new();
+        result.ForEach(r => output.Add(CertificateDtoMapper.CertificateToDto(r)));
+
+        return output;
+
+    }
+
 }
