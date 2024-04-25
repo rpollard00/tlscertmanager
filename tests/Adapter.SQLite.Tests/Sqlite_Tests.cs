@@ -8,6 +8,7 @@ public class DriveDbTests
 
     // private readonly IConfiguration _configuration;
     private readonly string _connectionString = "DataSource=:memory";
+    // private readonly string _connectionString = "DataSource=../../../../../AppData/dev_database.db";
     private readonly ICertDbContext _dbContext;
 
     public DriveDbTests()
@@ -121,8 +122,6 @@ public class DriveDbTests
         }
 
         Assert.Equal(retrievedCert.Id, cert.Id);
-        // Assert.Equal(retrievedCert.SubjectAlternateNames, cert.SubjectAlternateNames);
-        // Assert.Equal(retrievedCert, cert);
 
     }
 
