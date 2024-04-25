@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Adapter.Api.Controllers;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 public class AdapterApi
@@ -12,7 +13,10 @@ public class AdapterApi
 
         System.Console.WriteLine("Constructor invoked");
         _builder.Services.AddEndpointsApiExplorer();
-        _builder.Services.AddControllers();
+        _builder.Services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+        });
         _builder.Services.AddSwaggerGen();
 
         // Necessary when called from a different assembly
