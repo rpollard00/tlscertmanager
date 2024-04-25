@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Core.Models;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Adapter.Api.SQLite.DataAccess;
 
@@ -46,8 +44,6 @@ public class CertDbContext : DbContext, ICertDbContext
 
                 var connectionStr = config.GetSection("ConnectionStrings")["Default"];
                 optionsBuilder.UseSqlite(connectionStr);
-                System.Console.WriteLine($"THE CONNECTION STRING: {connectionStr}");
-                System.Console.WriteLine("THE DB CONTEXT IS WORKING.....");
             }
         }
         optionsBuilder.LogTo(Console.WriteLine);
