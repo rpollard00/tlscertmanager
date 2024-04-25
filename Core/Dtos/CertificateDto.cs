@@ -11,8 +11,8 @@ public class CertificateDto
     public required string CryptoAlgorithm { get; set; }
     public required string Issuer { get; set; }
 
-    public List<string> SubjectAlternateNames { get; set; } = new();
-    public List<string> SystemNode { get; set; } = new();
+    public List<string>? SubjectAlternateNames { get; set; } = new();
+    public List<string>? SystemNode { get; set; } = new();
 
     public bool isExpiring { get; set; }
 
