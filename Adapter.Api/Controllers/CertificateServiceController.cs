@@ -19,6 +19,7 @@ public class CertificateServiceController : ControllerBase
         var result = _certSvc.GetCertificates();
 
         return Ok(result);
+
     }
 
 

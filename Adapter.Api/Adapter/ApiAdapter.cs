@@ -37,9 +37,9 @@ public class ApiAdapter : ICertificateService
         // return CertificateDtoMapper.CertificateToDto();
     }
 
-    public List<CertificateDto>? GetCertificates()
+    public async Task<List<CertificateDto>>? GetCertificates()
     {
-        var result = _certificateRetriever.GetAllCertificates();
+        var result = await _certificateRetriever.GetAllCertificates();
 
         if (result.Count == 0)
         {

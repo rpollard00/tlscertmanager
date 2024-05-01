@@ -50,13 +50,13 @@ public class CertificateDataAdapterRetrieve : ICertificateRetriever
         _dbContext = dbContext;
     }
 
-    public List<Certificate> GetAllCertificates()
+    public async Task<List<Certificate>> GetAllCertificates()
     {
-        var certs = _dbContext.Certificates.Include(c => c.CryptoAlgorithm)
+        var certs = await _dbContext.Certificates.Include(c => c.CryptoAlgorithm)
             .Include(c => c.SubjectAlternateNames)
             .Include(c => c.SystemNode)
             .Include(c => c.Issuer)
-            .ToList();
+            .ToListAsync();
 
         return certs;
     }

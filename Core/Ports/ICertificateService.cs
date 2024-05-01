@@ -4,7 +4,7 @@ public interface ICertificateService
 {
     CertificateDto CreateCertificate(CertificateDto cert);
 
-    List<CertificateDto>? GetCertificates();
+    Task<List<CertificateDto>>? GetCertificates();
     CertificateDto? GetCertificateById(long id);
 
 }
