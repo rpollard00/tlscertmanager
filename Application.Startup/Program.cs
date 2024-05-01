@@ -1,7 +1,8 @@
-﻿using Adapter.Api.SQLite.DataAccess;
+﻿using Adapter.Api.Adapter;
 using Adapter.Api.SQLite;
-using Adapter.Api.Adapter;
+using Adapter.Api.SQLite.DataAccess;
 using Microsoft.Extensions.DependencyInjection;
+
 var api = new AdapterApi(args, options =>
 {
     options.AddScoped<ICertDbContext, CertDbContext>();
