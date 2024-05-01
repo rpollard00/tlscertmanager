@@ -1,8 +1,15 @@
-﻿@inherits LayoutComponentBase
+﻿@using BlazorUI.Services
+@inherits LayoutComponentBase
+@inject StateContainer StateContainer
 <div class="page">
+    
+    @if (StateContainer.IsLoggedIn)
+    {
+
     <div class="sidebar">
-        <NavMenu />
+        <NavMenu/>
     </div>
+    }
 
     <main>
         <div class="top-row px-4">
