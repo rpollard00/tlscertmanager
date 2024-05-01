@@ -1,0 +1,20 @@
+@page "/dashboard"
+@using BlazorUI.Services
+@inject StateContainer StateContainer
+@inject NavigationManager Nav
+
+<PageTitle>Certificate Dashboard</PageTitle>
+
+<p>Cool placeholder</p>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        if (!StateContainer.IsLoggedIn)
+        {
+            Nav.NavigateTo("/"); 
+        }
+    }
+
+}

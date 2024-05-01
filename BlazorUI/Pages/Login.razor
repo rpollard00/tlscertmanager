@@ -1,0 +1,73 @@
+@page "/"
+@using BlazorUI.Services
+@inject NavigationManager Nav;
+@inject StateContainer StateContainer;
+
+<PageTitle>Login</PageTitle>
+@if (StateContainer.IsLoggedIn)
+{
+   <p>Already Logged in...</p>
+   Submit();
+}
+else
+{
+   @if (!_emailProvided)
+   {
+   <EditForm Model="LoginForm" OnValidSubmit="SetEmailProvided" FormName="LoginForm2">
+      <DataAnnotationsValidator/>
+      <label>Email Address: </label>
+      <InputText @bind-Value=@LoginForm!.Email></InputText>
+      <button type="submit">Submit</button>
+   </EditForm>
+   }
+   else
+   {
+   @* This is a mock-up, if we had an SSO provider we wouldn't do this *@
+   <EditForm Model="PasswordForm" OnValidSubmit="Submit" FormName="PasswordForm2">
+      <label>Password: </label>
+      <InputText type="password" @bind-Value=@PasswordForm!.Password></InputText>
+      <button type="submit">Login</button>
+   </EditForm>
+   }
+}
+
+@code {
+   [SupplyParameterFromForm] LoginFormModel? LoginForm { get; set; }
+   [SupplyParameterFromForm] PasswordFormModel? PasswordForm { get; set; }
+
+   private bool _emailProvided = false;
+   
+   protected override void OnInitialized()
+   {
+      LoginForm ??= new();
+      PasswordForm ??= new();
+   }
+
+   public void SetEmailProvided()
+   {
+      Console.WriteLine($"{LoginForm.Email} 'logged in' ");
+      _emailProvided = true;
+   }
+
+   public void Submit()
+   {
+      Console.WriteLine($"{LoginForm.Email} logged in successfully...");
+      StateContainer.IsLoggedIn = true;   
+      Nav.NavigateTo("/dashboard");
+   }
+
+   public class LoginFormModel
+   {
+      [Required]
+      [EmailAddress]
+      public string? Email { get; set; }
+      
+   }
+
+   public class PasswordFormModel
+   {
+      [Required]
+      public string? Password { get; set; }
+   }
+
+}
