@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter.SQLite.Tests", "tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Startup", "Application.Startup\Application.Startup.csproj", "{704928D0-4A30-464E-AD55-6682917C95DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorUI", "BlazorUI\BlazorUI.csproj", "{434626E5-1054-46FE-B72A-C85CD0860A6E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{704928D0-4A30-464E-AD55-6682917C95DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{704928D0-4A30-464E-AD55-6682917C95DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{704928D0-4A30-464E-AD55-6682917C95DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{434626E5-1054-46FE-B72A-C85CD0860A6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{434626E5-1054-46FE-B72A-C85CD0860A6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{434626E5-1054-46FE-B72A-C85CD0860A6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{434626E5-1054-46FE-B72A-C85CD0860A6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3E47F977-6107-4AC7-869A-BF7C3DC79F9A} = {E7985911-07B5-4732-A5B6-8553B00E22F1}
