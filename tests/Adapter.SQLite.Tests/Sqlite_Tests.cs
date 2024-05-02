@@ -1,5 +1,6 @@
 using Core.Models;
 using Adapter.Api.SQLite.DataAccess;
+using Adapter.SQLite.Adapters;
 
 namespace Adapter.Api.SQLite.Tests;
 
@@ -19,7 +20,7 @@ public class DriveDbTests
     }
     // Using tests to drive db before I've created any frontend or API endpoints
     [Fact]
-    public void CreateCertInSqliteDbTest()
+    public async void CreateCertInSqliteDbTest()
     {
         Certificate cert = new()
         {
@@ -38,14 +39,14 @@ public class DriveDbTests
         };
 
         CertificateDataAdapterCreate adapter = new(_dbContext);
-        adapter.CreateCertificate(cert);
+        await adapter.CreateCertificate(cert);
 
     }
 
     [Fact]
-    public void GetCertFromSqliteDbTest()
+    public async void GetCertFromSqliteDbTest()
     {
-        Certificate cert = new()
+        Certificate newCert = new()
         {
             SubjectName = "testCert.test.com",
             IssueDate = 1682273316000,
@@ -62,7 +63,7 @@ public class DriveDbTests
         };
 
         CertificateDataAdapterCreate adapter = new(_dbContext);
-        cert = adapter.CreateCertificate(cert);
+        var cert = await adapter.CreateCertificate(newCert);
 
 
         Assert.InRange(cert.Id, 1, long.MaxValue);
@@ -70,11 +71,7 @@ public class DriveDbTests
         long id = cert.Id;
 
         CertificateDataAdapterRetrieve retrievalAdapter = new(_dbContext);
-        var retrievedCert = retrievalAdapter.GetCertificateById(id);
-        if (retrievedCert == null)
-        {
-            Assert.Fail("Failed to retrieve certificate");
-        }
+        var retrievedCert = await retrievalAdapter.GetCertificateById(id)!;
 
         Assert.Equal(retrievedCert.Id, cert.Id);
         // Assert.Equal(retrievedCert.SubjectAlternateNames, cert.SubjectAlternateNames);
@@ -83,9 +80,9 @@ public class DriveDbTests
     }
 
     [Fact]
-    public void InsertCertWithSan()
+    public async void InsertCertWithSan()
     {
-        Certificate cert = new()
+        Certificate newCert = new()
         {
             SubjectName = "sanCert.test.com",
             IssueDate = 1682273316000,
@@ -107,7 +104,7 @@ public class DriveDbTests
         };
 
         CertificateDataAdapterCreate adapter = new(_dbContext);
-        cert = adapter.CreateCertificate(cert);
+        var cert = adapter.CreateCertificate(newCert);
 
 
         Assert.InRange(cert.Id, 1, long.MaxValue);
@@ -115,21 +112,17 @@ public class DriveDbTests
         long id = cert.Id;
 
         CertificateDataAdapterRetrieve retrievalAdapter = new(_dbContext);
-        var retrievedCert = retrievalAdapter.GetCertificateById(id);
-        if (retrievedCert == null)
-        {
-            Assert.Fail("Failed to retrieve certificate");
-        }
+        var retrievedCert = await retrievalAdapter.GetCertificateById(id)!;
 
         Assert.Equal(retrievedCert.Id, cert.Id);
 
     }
 
     [Fact]
-    public void InsertCertAndMergeWithExistingSans()
+    public async Task InsertCertAndMergeWithExistingSans()
     {
         // Build Two Certificates with Overlapping but Distinct SANs
-        Certificate cert1 = new()
+        Certificate newCert1 = new()
         {
             SubjectName = "sanCert.test.com",
             IssueDate = 1682273316000,
@@ -150,7 +143,7 @@ public class DriveDbTests
             },
         };
 
-        Certificate cert2 = new()
+        Certificate newCert2 = new()
         {
             SubjectName = "sanCertMerge.test.com",
             IssueDate = 1682273316000,
@@ -173,8 +166,8 @@ public class DriveDbTests
 
         CertificateDataAdapterCreate adapter = new(_dbContext);
 
-        cert1 = adapter.CreateCertificate(cert1);
-        cert2 = adapter.CreateCertificate(cert2);
+        var cert1 = await adapter.CreateCertificate(newCert1);
+        var cert2 =  await adapter.CreateCertificate(newCert2);
 
         Assert.InRange(cert1.Id, 1, long.MaxValue);
         Assert.InRange(cert2.Id, 1, long.MaxValue);
@@ -182,8 +175,8 @@ public class DriveDbTests
 
         //Retrieve the Newly Inserted Certificates
         CertificateDataAdapterRetrieve retrievalAdapter = new(_dbContext);
-        var retrievedCert1 = retrievalAdapter.GetCertificateById(cert1.Id);
-        var retrievedCert2 = retrievalAdapter.GetCertificateById(cert2.Id);
+        var retrievedCert1 = await retrievalAdapter.GetCertificateById(cert1.Id);
+        var retrievedCert2 = await retrievalAdapter.GetCertificateById(cert2.Id);
 
         // Assert that the retrieved certificates have the correct SubjectAlternateNames
         Assert.Equal(3, retrievedCert1.SubjectAlternateNames.Count);
