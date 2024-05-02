@@ -1,6 +1,6 @@
 using Core.Ports;
 
-namespace Adapter.SQLite;
+namespace Adapter.SQLite.Adapters;
 
 public class CertificateDataAdapterRemove(ICertDbContext dbContext) : ICertificateRemover
 {

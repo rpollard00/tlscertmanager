@@ -1,7 +1,7 @@
 using Core.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Adapter.Api.SQLite;
+namespace Adapter.SQLite.Adapters;
 
 public class CertificateDataAdapterRetrieve(ICertDbContext dbContext) : ICertificateRetriever
 {

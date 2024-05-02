@@ -1,6 +1,6 @@
 using Core.Models;
 
-namespace Adapter.Api.SQLite;
+namespace Adapter.SQLite.Adapters;
 
 public class CertificateDataAdapterUpdate : ICertificateUpdater
 {
