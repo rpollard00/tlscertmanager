@@ -1,6 +1,7 @@
 ﻿using Adapter.Api.Adapter;
-using Adapter.Api.SQLite;
 using Adapter.Api.SQLite.DataAccess;
+using Adapter.SQLite.Adapters;
+using Core.Ports;
 using Microsoft.Extensions.DependencyInjection;
 
 var api = new AdapterApi(args, options =>
