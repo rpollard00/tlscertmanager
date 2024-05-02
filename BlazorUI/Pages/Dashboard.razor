@@ -1,20 +1,65 @@
 @page "/dashboard"
+@using System.Runtime.InteropServices.JavaScript
+@using System.Text.Json.Serialization
 @using BlazorUI.Services
+@using Core.Dtos
+@using Microsoft.EntityFrameworkCore.Query
 @inject StateContainer StateContainer
 @inject NavigationManager Nav
+@inject HttpClient Http
 
 <PageTitle>Certificate Dashboard</PageTitle>
-
-<p>Cool placeholder</p>
+@if (Certificates is null)
+{
+    <p>Loading...</p> 
+}
+else
+{
+    @foreach (var cert in Certificates)
+    {
+        <div class="cert-summary">
+            <span>@cert.SubjectName</span>
+            <span>@cert.SubjectAlternateNames.Aggregate("", (curr, next) => $"{curr}, {next}")</span>
+            <span>@cert.CryptoAlgorithm</span>
+            <span>@cert.isExpiring.ToString()</span>
+            <span>@FormatDate(cert.IssueDate)</span>
+            <span>@FormatDate(cert.ExpirationDate)</span>
+            <span>@cert.Issuer</span>
+        </div>
+        <br/>
+    }
+}
 
 @code {
+    private CertificateDto[]? Certificates { get; set; } 
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         if (!StateContainer.IsLoggedIn)
         {
-            Nav.NavigateTo("/"); 
+            Nav.NavigateTo("/");
         }
+
+        try
+        {
+            var response = await Http.GetFromJsonAsync<CertificateResponse>("CertificateService");
+            Certificates = response.Result;
+        }
+        catch
+        {
+            Console.WriteLine("Unable to retrieve Certificate Date");
+        }
+        
     }
+
+    string FormatDate(long rawDate)
+    {
+        return DateTimeOffset.FromUnixTimeMilliseconds(rawDate).ToString();
+    }
+    public class CertificateResponse
+    {
+        public CertificateDto[]? Result { get; set; }
+    }
+
 
 }
