@@ -15,7 +15,14 @@ public class AdapterApi
         _builder.Services.AddEndpointsApiExplorer();
         _builder.Services.AddControllers().AddJsonOptions(options =>
         {
-            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+            //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+        });
+        _builder.Services.AddCors(corsOptions =>
+        {
+            corsOptions.AddPolicy(name: "AllowAllOrigins", policy =>
+            {
+                policy.AllowAnyOrigin();
+            });
         });
         _builder.Services.AddSwaggerGen();
 
@@ -41,9 +48,9 @@ public class AdapterApi
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Hello"));
+            app.UseCors("AllowAllOrigins");
         }
         // app.UseHttpsRedirection();
-
 
         // app.UseAuthorization();
         app.MapControllers();
