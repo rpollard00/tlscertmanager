@@ -1,4 +1,6 @@
+namespace Core.Ports;
+
 public interface ICertificateRemover
 {
-    void RemoveCertificate(long id);
+    Task RemoveCertificate(long id);
 }
