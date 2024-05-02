@@ -36,6 +36,7 @@ public static class CertificateDtoMapper
 
         return certDto;
     }
+    
 }
 
 // public class CertificateDto

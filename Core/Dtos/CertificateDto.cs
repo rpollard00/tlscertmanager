@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Core.Dtos;
 
 public class CertificateDto
@@ -12,6 +14,7 @@ public class CertificateDto
     public required string Issuer { get; set; }
 
     public List<string>? SubjectAlternateNames { get; set; } = new();
+    
     public List<string>? SystemNode { get; set; } = new();
 
     public bool isExpiring { get; set; }
