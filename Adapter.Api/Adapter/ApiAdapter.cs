@@ -1,6 +1,7 @@
 using Core.Models;
 using Core.Dtos;
 using Core.Mapper;
+using Core.Ports;
 
 namespace Adapter.Api.Adapter;
 
@@ -24,13 +25,13 @@ public class ApiAdapter : ICertificateService
         _certificateUpdater = certificateUpdater;
     }
 
-    public CertificateDto CreateCertificate(CertificateDto cert)
+    public Task<CertificateDto> CreateCertificate(CertificateDto cert)
     {
         // _certificateCreator.CreateCertificate(cert);
         throw new NotImplementedException("Todo Create Certificate Adapter");
     }
 
-    public CertificateDto? GetCertificateById(long id)
+    public Task<CertificateDto?> GetCertificateById(long id)
     {
 
         throw new NotImplementedException("Todo GetCertificate By Id");
