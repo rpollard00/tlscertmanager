@@ -7,5 +7,5 @@ public class CryptoAlgorithm
 {
     public long Id { get; set; }
     public ICollection<Certificate> Certificates { get; } = new List<Certificate>();
-    public string Name { get; set; } = String.Empty;
+    public string? Name { get; set; } = String.Empty;
 }
