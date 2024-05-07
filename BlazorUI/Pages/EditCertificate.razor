@@ -1,9 +1,10 @@
 @page "/addCert"
-@using System.Net
-@using System.Security.Cryptography.X509Certificates
 @using Core.Dtos
 @using BlazorUI.Components
-@inject HttpClient httpClient
+@using BlazorUI.Services
+@inject HttpClient HttpClient
+@inject StateContainer StateContainer
+@inject NavigationManager Nav
 
 <PageTitle>Add Certificate</PageTitle>
 
@@ -26,6 +27,14 @@
 @code {
     [SupplyParameterFromForm] CertificateFormModel? CertificateForm { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (!StateContainer.IsLoggedIn)
+        {
+            Nav.NavigateTo("/");
+        }
+        
+    }
     protected override void OnInitialized()
     {
         CertificateForm ??= new();
@@ -33,21 +42,6 @@
         CertificateForm.ExpirationDate = DateTime.Now;
     }
 
-    public class CertificateFormModel
-    {
-        public string? SubjectName { get; set; }
-
-        public DateTime IssueDate { get; set; }
-        public DateTime ExpirationDate { get; set; }
-
-        public string? CryptoAlgorithm { get; set; }
-        public string? Issuer { get; set; }
-
-        public List<string>? SubjectAlternateNames { get; set; } = new();
-
-        public List<string>? SystemNode { get; set; } = new();
-    }
-    
     private async Task Submit()
     {
         CertificateDto certificateDto = new()
@@ -62,7 +56,7 @@
         };
         try
         {
-            var response = await httpClient.PostAsJsonAsync<CertificateDto>("/certificateService", certificateDto);
+            var response = await HttpClient.PostAsJsonAsync<CertificateDto>("/certificateService", certificateDto);
 
             response.EnsureSuccessStatusCode();
         }
