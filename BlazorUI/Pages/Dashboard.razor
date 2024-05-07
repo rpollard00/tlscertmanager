@@ -15,19 +15,29 @@
 }
 else
 {
+    <table>
+        <thead>
+            <th>Subject Name</th>
+            <th>Subject Alternate Names</th>
+            <th>Crypto Algorithm</th>
+            <th>Issuer</th>
+            <th>Is Expiring</th>
+            <th>Issue Date</th>
+            <th>Expiration Date</th>
+        </thead>
     @foreach (var cert in Certificates)
     {
-        <div class="cert-summary">
-            <span>@cert.SubjectName</span>
-            <span>@cert.SubjectAlternateNames.Aggregate("", (curr, next) => $"{curr}, {next}")</span>
-            <span>@cert.CryptoAlgorithm</span>
-            <span>@cert.IsExpiring.ToString()</span>
-            <span>@FormatDate(cert.IssueDate)</span>
-            <span>@FormatDate(cert.ExpirationDate)</span>
-            <span>@cert.Issuer</span>
-        </div>
-        <br/>
+        <tr class="cert-summary">
+            <td>@cert.SubjectName</td>
+            <td>@cert.SubjectAlternateNames.Aggregate("", (curr, next) => $"{curr}, {next}")</td>
+            <td>@cert.CryptoAlgorithm</td>
+            <td>@cert.Issuer</td>
+            <td>@cert.IsExpiring.ToString()</td>
+            <td>@FormatDate(cert.IssueDate)</td>
+            <td>@FormatDate(cert.ExpirationDate)</td>
+        </tr>
     }
+    </table>
 }
 
 @code {
