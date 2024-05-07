@@ -21,7 +21,7 @@ else
             <span>@cert.SubjectName</span>
             <span>@cert.SubjectAlternateNames.Aggregate("", (curr, next) => $"{curr}, {next}")</span>
             <span>@cert.CryptoAlgorithm</span>
-            <span>@cert.isExpiring.ToString()</span>
+            <span>@cert.IsExpiring.ToString()</span>
             <span>@FormatDate(cert.IssueDate)</span>
             <span>@FormatDate(cert.ExpirationDate)</span>
             <span>@cert.Issuer</span>

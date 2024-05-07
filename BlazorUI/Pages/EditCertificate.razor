@@ -1,0 +1,77 @@
+@page "/addCert"
+@using System.Net
+@using System.Security.Cryptography.X509Certificates
+@using Core.Dtos
+@using BlazorUI.Components
+@inject HttpClient httpClient
+
+<PageTitle>Add Certificate</PageTitle>
+
+<EditForm style="display: flex; flex-direction: column;" Model="CertificateForm" OnValidSubmit="Submit" FormName="CertForm">
+    <label>Subject Name: </label>
+    <InputText @bind-Value=@CertificateForm!.SubjectName></InputText>
+    <label>Issuer: </label>
+    <InputText @bind-Value=@CertificateForm!.Issuer></InputText>
+    <label>Crypto Algorithm: </label>
+    <InputText @bind-Value=@CertificateForm!.CryptoAlgorithm></InputText>
+    <label>Issue Date: </label>
+    <InputDate @bind-Value=@CertificateForm.IssueDate></InputDate>
+    <label>Expiration Date: </label>
+    <InputDate @bind-Value=@CertificateForm.ExpirationDate></InputDate>
+    <ListInput FieldLabel="Subject Alternate Names" ValueList=@CertificateForm!.SubjectAlternateNames />
+    <ListInput FieldLabel="Associated Systems" ValueList=@CertificateForm!.SystemNode/>
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm] CertificateFormModel? CertificateForm { get; set; }
+
+    protected override void OnInitialized()
+    {
+        CertificateForm ??= new();
+        CertificateForm.IssueDate = DateTime.Now;
+        CertificateForm.ExpirationDate = DateTime.Now;
+    }
+
+    public class CertificateFormModel
+    {
+        public string? SubjectName { get; set; }
+
+        public DateTime IssueDate { get; set; }
+        public DateTime ExpirationDate { get; set; }
+
+        public string? CryptoAlgorithm { get; set; }
+        public string? Issuer { get; set; }
+
+        public List<string>? SubjectAlternateNames { get; set; } = new();
+
+        public List<string>? SystemNode { get; set; } = new();
+    }
+    
+    private async Task Submit()
+    {
+        CertificateDto certificateDto = new()
+        {
+            SubjectName = CertificateForm?.SubjectName,
+            IssueDate = new DateTimeOffset(CertificateForm!.IssueDate).ToUnixTimeMilliseconds(),
+            ExpirationDate = new DateTimeOffset(CertificateForm!.ExpirationDate).ToUnixTimeMilliseconds(),
+            CryptoAlgorithm = CertificateForm?.CryptoAlgorithm,
+            Issuer = CertificateForm?.Issuer,
+            SubjectAlternateNames = CertificateForm?.SubjectAlternateNames,
+            SystemNode = CertificateForm?.SystemNode,
+        };
+        try
+        {
+            var response = await httpClient.PostAsJsonAsync<CertificateDto>("/certificateService", certificateDto);
+
+            response.EnsureSuccessStatusCode();
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"Create certificate request failed: {ex.Message}");
+        }
+    } 
+    
+    
+
+}
