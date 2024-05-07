@@ -40,7 +40,7 @@ public class ApiAdapter : ICertificateService
         // return CertificateDtoMapper.CertificateToDto();
     }
 
-    public async Task<List<CertificateDto>?> GetCertificates()
+    public async Task<List<CertificateDto?>?> GetCertificates()
     {
         var result = await _certificateRetriever.GetAllCertificates();
 
@@ -49,10 +49,10 @@ public class ApiAdapter : ICertificateService
             return null;
         }
 
-        List<CertificateDto?> output = new();
+        List<CertificateDto>? output = new();
         result.ForEach(r => output.Add(CertificateDtoMapper.CertificateToDto(r)));
 
-        return output;
+        return output!;
 
     }
 
