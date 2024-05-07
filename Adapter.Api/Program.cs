@@ -21,6 +21,7 @@ public class AdapterApi
         {
             corsOptions.AddPolicy(name: "AllowAllOrigins", policy =>
             {
+                policy.AllowAnyHeader();
                 policy.AllowAnyOrigin();
             });
         });

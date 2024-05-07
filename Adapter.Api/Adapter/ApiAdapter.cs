@@ -1,6 +1,6 @@
 using Core.Models;
 using Core.Dtos;
-using Core.Mapper;
+using Core.Mappers;
 using Core.Ports;
 
 namespace Adapter.Api.Adapter;
@@ -25,20 +25,22 @@ public class ApiAdapter : ICertificateService
         _certificateUpdater = certificateUpdater;
     }
 
-    public Task<CertificateDto> CreateCertificate(CertificateDto cert)
+    public async Task<CertificateDto> CreateCertificate(CertificateDto certDto)
     {
+        var cert = CertificateDtoMapper.DtoToCertificate(certDto);
+        var result = await _certificateCreator.CreateCertificate(cert);
         // _certificateCreator.CreateCertificate(cert);
-        throw new NotImplementedException("Todo Create Certificate Adapter");
+        return CertificateDtoMapper.CertificateToDto(result);
     }
 
     public Task<CertificateDto?> GetCertificateById(long id)
     {
-
+        
         throw new NotImplementedException("Todo GetCertificate By Id");
         // return CertificateDtoMapper.CertificateToDto();
     }
 
-    public async Task<List<CertificateDto>>? GetCertificates()
+    public async Task<List<CertificateDto>?> GetCertificates()
     {
         var result = await _certificateRetriever.GetAllCertificates();
 
@@ -47,7 +49,7 @@ public class ApiAdapter : ICertificateService
             return null;
         }
 
-        List<CertificateDto> output = new();
+        List<CertificateDto?> output = new();
         result.ForEach(r => output.Add(CertificateDtoMapper.CertificateToDto(r)));
 
         return output;

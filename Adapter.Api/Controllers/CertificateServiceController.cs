@@ -1,3 +1,4 @@
+using Core.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Adapter.Api.Controllers;
@@ -16,10 +17,15 @@ public class CertificateServiceController : ControllerBase
     [HttpGet()]
     public IActionResult GetAllCertficiates()
     {
-        var result = _certSvc.GetCertificates();
-
-        return Ok(result);
-
+        try
+        {
+            var result = _certSvc.GetCertificates();
+            return Ok(result);
+        }
+        catch
+        {
+            return BadRequest();
+        }
     }
 
 
@@ -30,8 +36,9 @@ public class CertificateServiceController : ControllerBase
     }
 
     [HttpPost()]
-    public string PostNewCertificate()
+    public IActionResult PostNewCertificate(CertificateDto dto)
     {
-        return $"There must be some way to get the body of the request from the middleware";
+        var result = _certSvc.CreateCertificate(dto);
+        return Ok(result);
     }
 }
