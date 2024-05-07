@@ -16,7 +16,7 @@ public class CertificateDataAdapterRetrieve(ICertDbContext dbContext) : ICertifi
         return certs;
     }
 
-    public async Task<Certificate>? GetCertificateById(long id)
+    public async Task<Certificate?> GetCertificateById(long id)
     {
         var cert = await dbContext.Certificates.Where(c => c.Id == id)
             .Include(c => c.CryptoAlgorithm)
@@ -31,8 +31,15 @@ public class CertificateDataAdapterRetrieve(ICertDbContext dbContext) : ICertifi
 
     }
 
-    public async Task<List<Certificate>> GetCertificatesByDomain()
+    public async Task<List<Certificate>> GetCertificatesByDomain(string domain)
     {
-        throw new NotImplementedException();
+        var certs = await dbContext.Certificates.Where(c => c.SubjectName != null && c.SubjectName.Contains(domain))
+            .Include(c => c.CryptoAlgorithm)
+            .Include(c => c.SubjectAlternateNames)
+            .Include(c => c.SystemNode)
+            .Include(c => c.Issuer)
+            .ToListAsync();
+
+        return certs;
     }
 }
