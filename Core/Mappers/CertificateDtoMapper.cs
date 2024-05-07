@@ -1,13 +1,12 @@
-using Core.Models;
 using Core.Dtos;
+using Core.Models;
 
-namespace Core.Mapper;
+namespace Core.Mappers;
 
 public static class CertificateDtoMapper
 {
-    public static CertificateDto? CertificateToDto(Certificate cert)
+    public static CertificateDto CertificateToDto(Certificate cert)
     {
-
         CertificateDto certDto = new()
         {
             Id = cert.Id,
@@ -19,24 +18,41 @@ public static class CertificateDtoMapper
             Issuer = cert.Issuer.Name ?? "",
             CryptoAlgorithm = cert.CryptoAlgorithm.Name ?? "",
 
-            SubjectAlternateNames = cert.SubjectAlternateNames
-                                    != null ? cert.SubjectAlternateNames
-                                    .Select(s => s.Name ?? "")
-                                    .ToList() : null,
+            SubjectAlternateNames = cert.SubjectAlternateNames?.Select(s => s.Name ?? "").ToList() ?? new List<string>(),
 
-            SystemNode = cert.SystemNode
-                         != null ? cert.SystemNode
-                         .Select(s => s.Name ?? "")
-                         .ToList() : null,
+            SystemNode = cert.SystemNode?.Select(s => s.Name ?? "").ToList() ?? new List<string>(),
 
             // TODO: Not hardcode the threshold
-            isExpiring = cert.isExpiring(30),
-
+            IsExpiring = cert.isExpiring(30),
         };
 
         return certDto;
     }
-    
+
+    public static Certificate DtoToCertificate(CertificateDto dto)
+    {
+        Certificate cert = new()
+        {
+            Id = dto.Id,
+            SubjectName = dto.SubjectName,
+            
+            CryptoAlgorithm = new CryptoAlgorithm() { Name = dto.CryptoAlgorithm },
+            Issuer = new Issuer() { Name = dto.Issuer },
+            IssueDate = dto.IssueDate,
+            ExpirationDate = dto.ExpirationDate,
+            SystemNode = dto.SystemNode != null ? 
+                new List<SystemNode>(): null,
+            SubjectAlternateNames = dto.SubjectAlternateNames != null ?
+                new List<SubjectAlternateName>() : null,
+
+        };
+
+        dto.SystemNode?.ForEach(n => cert.SystemNode?.Add(new SystemNode() { Name= n }));
+        dto.SubjectAlternateNames?.ForEach(
+            s => cert.SubjectAlternateNames?.Add(new SubjectAlternateName() { Name = s }));
+
+        return cert;
+    } 
 }
 
 // public class CertificateDto
